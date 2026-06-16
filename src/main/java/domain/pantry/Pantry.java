@@ -39,7 +39,7 @@ public class Pantry {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingridient_id", nullable = false)
-    private Ingredient ingredient;
+    private Ingredient ingredientId;
 
     @Column(nullable = false, length = 100)
     private String name;
