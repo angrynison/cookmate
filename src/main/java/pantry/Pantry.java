@@ -1,5 +1,6 @@
 package pantry;
 
+import global.type.IngredientCategory;
 import ingredient.Ingredient;
 import member.domain.Member;
 import global.type.StorageType;
@@ -39,7 +40,7 @@ public class Pantry {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ingridient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
     @Column(nullable = false, length = 100)
@@ -59,6 +60,10 @@ public class Pantry {
     @Enumerated(EnumType.STRING)
     @Column(name = "storage_type", nullable = false)
     private StorageType storageType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ingredient_category")
+    private IngredientCategory ingredientCategory;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -92,6 +97,5 @@ public class Pantry {
         return this;
     }
 
-    public static void delete(Pantry pantry) {}
 
 }

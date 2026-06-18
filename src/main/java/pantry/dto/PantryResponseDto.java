@@ -15,23 +15,19 @@ import java.time.LocalDate;
 @Builder
 public class PantryResponseDto {
 
-    // 백엔드 데이터 응답 반환
-    public record Response(
+    // 백엔드 데이터(dashboard) 응답 반환
+    public record DashboardResponse(
             Long id,
             String name,
             LocalDate expiryDate,
             StorageType storageType,
             Integer quantity
-    ) {
-        // pantry 엔티티를 dto 객체로 조립해서 리턴, static 메서드만 가능
-        public static Response from(Pantry pantry) {
-            return new Response(
-                    pantry.getId(),
-                    pantry.getName(),
-                    pantry.getExpiryDate(),
-                    pantry.getStorageType(),
-                    pantry.getQuantity()
-            );
-        }
-    }
+    ) {}
+
+    // 화면 상단의 재료 요약 데이터 응답 반환
+    public record SummaryResponse(
+            Long totalItems,
+            Long oldItems,
+            Long freshItems
+    ) {}
 }
