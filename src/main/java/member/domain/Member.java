@@ -1,4 +1,4 @@
-package member;
+package member.domain;
 
 import global.type.Cuisine;
 import jakarta.persistence.*;
