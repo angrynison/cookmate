@@ -1,11 +1,12 @@
 package pantry;
 
 import ingredient.Ingredient;
-import member.Member;
+import member.domain.Member;
 import global.type.StorageType;
 import global.type.Unit;
 import jakarta.persistence.*;
 import lombok.*;
+import pantry.dto.PantryRequestDto;
 
 import java.time.LocalDate;
 
@@ -35,11 +36,11 @@ public class Pantry {
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
-    private Member memberId;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingridient_id", nullable = false)
-    private Ingredient ingredientId;
+    private Ingredient ingredient;
 
     @Column(nullable = false, length = 100)
     private String name;
@@ -64,12 +65,33 @@ public class Pantry {
     private Unit unit;
 
 
-    public void updatePantry(String name, LocalDate purchaseDate, StorageType storageType, Integer quantityUnit) {
-        if (name != null) this.name = name;
-        if (purchaseDate != null) this.purchaseDate = purchaseDate;
-        if (expiryDate != null) this.expiryDate = expiryDate;
-        if (storageType != null) this.storageType = storageType;
-        if (quantityUnit != null) this.quantity = quantityUnit;
+    /*
+    식재료 등록, 만료일자는 따로 policy를 두어서 작성할 예정
+     */
+    public static Pantry create(Member member, Ingredient ingredient, PantryRequestDto.CreateRequest request) {
+        return Pantry.builder()
+                .member(member)
+                .ingredient(ingredient)
+                .name(request.name())
+                .purchaseDate(request.purchaseDate())
+                .storageType(request.storageType())
+                .quantity(request.quantity())
+                .build();
     }
+    
+    /*
+    식재료 업데이트
+     */
+    public Pantry update(PantryRequestDto.UpdateRequest request) {
+        if (request.name() != null) this.name = request.name();
+        if (request.purchaseDate() != null) this.purchaseDate = request.purchaseDate();
+        if (request.expiryDate() != null) this.expiryDate = request.expiryDate();
+        if (request.storageType() != null) this.storageType = request.storageType();
+        if (request.quantity() != null) this.quantity = request.quantity();
+
+        return this;
+    }
+
+    public static void delete(Pantry pantry) {}
 
 }
