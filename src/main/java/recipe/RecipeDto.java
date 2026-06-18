@@ -1,4 +1,4 @@
-package domain.recipe;
+package recipe;
 
 public class RecipeDto {
 }

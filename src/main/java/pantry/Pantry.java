@@ -1,7 +1,7 @@
-package domain.pantry;
+package pantry;
 
-import domain.ingredient.Ingredient;
-import domain.member.Member;
+import ingredient.Ingredient;
+import member.Member;
 import global.type.StorageType;
 import global.type.Unit;
 import jakarta.persistence.*;

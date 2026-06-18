@@ -1,4 +1,4 @@
-package domain.member;
+package member;
 
 public class MemberDto {
 }

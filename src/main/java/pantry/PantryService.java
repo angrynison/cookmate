@@ -1,4 +1,4 @@
-package domain.pantry;
+package pantry;
 
 public class PantryService {
 }

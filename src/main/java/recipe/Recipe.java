@@ -1,4 +1,4 @@
-package domain.recipe;
+package recipe;
 import jakarta.persistence.*;
 import lombok.*;
 

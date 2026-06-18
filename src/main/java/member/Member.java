@@ -1,31 +1,38 @@
-package domain.ingredient;
+package member;
 
-import global.type.IngredientCategory;
-import global.type.StorageType;
+import global.type.Cuisine;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "ingredient")
+@Table(name= "member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Ingredient {
+public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     String name;
-
     @Column(nullable = false)
-    Integer defaultExpiry;
+    String email;
+    @Column(nullable = false)
+    String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private IngredientCategory ingredientCategory;
+    private Sex sex;
 
     @Enumerated(EnumType.STRING)
-    private StorageType storageType;
+    @Column(nullable = false)
+    private Cuisine cuisine;
+    
+    public enum Sex {
+        남,
+        녀
+    }
 }

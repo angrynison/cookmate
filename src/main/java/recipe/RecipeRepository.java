@@ -1,4 +1,4 @@
-package domain.recipe;
+package recipe;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

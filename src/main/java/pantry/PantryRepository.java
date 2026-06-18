@@ -1,4 +1,4 @@
-package domain.pantry;
+package pantry;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
