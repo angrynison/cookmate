@@ -20,6 +20,8 @@ public final class PantryRequestDto {
 
     // web에서 정보를 받아와서 개인 식재료 등록
     public record CreateRequest(
+            Long ingredientId,
+
             @NotBlank(message = "식재료 이름은 필수입니다")
             String name,
 
