@@ -11,7 +11,6 @@ import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class PantryResponseDto {
 

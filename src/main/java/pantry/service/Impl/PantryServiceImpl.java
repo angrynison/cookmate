@@ -60,4 +60,7 @@ public class PantryServiceImpl implements PantryService {
         Pantry pantry = Pantry.create(member, ingredient, request);
         pantryRepository.save(pantry);
     }
+
+
+
 }
