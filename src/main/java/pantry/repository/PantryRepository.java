@@ -1,8 +1,9 @@
-package pantry;
+package pantry.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import pantry.Pantry;
 
 import java.time.LocalDate;
 
