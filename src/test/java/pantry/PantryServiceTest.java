@@ -1,6 +1,7 @@
 package pantry;
 
 import global.type.StorageType;
+import global.type.Unit;
 import ingredient.Ingredient;
 import ingredient.IngredientRepository;
 import member.MemberRepository;
@@ -12,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pantry.dto.PantryRequestDto;
+import pantry.repository.PantryRepository;
 import pantry.service.Impl.PantryServiceImpl;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -71,16 +73,20 @@ public class PantryServiceTest {
                 ingredient1,
                 "감자",
                 LocalDate.now(),
+                LocalDate.now().plusDays(4),
                 StorageType.냉장,
-                2
+                2,
+                Unit.EA
         );
 
         PantryRequestDto.CreateRequest request2 = new PantryRequestDto.CreateRequest(
                 ingredient2,
-                "양파",
+                "감자",
                 LocalDate.now(),
-                StorageType.냉장,
-                3
+                LocalDate.now().plusDays(3),
+                StorageType.상온,
+                3,
+                Unit.EA
         );
 
         given(memberRepository.findById(member1)).willReturn(Optional.of(mockMember1));
