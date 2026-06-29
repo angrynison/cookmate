@@ -73,14 +73,16 @@ public class Pantry {
     /*
     식재료 등록, 만료일자는 따로 policy를 두어서 작성할 예정
      */
-    public static Pantry create(Member member, Ingredient ingredient, PantryRequestDto.CreateRequest request) {
+    public static Pantry create(Member member, Ingredient ingredient, PantryRequestDto.CreateRequest request, LocalDate expiryDate) {
         return Pantry.builder()
                 .member(member)
                 .ingredient(ingredient)
                 .name(request.name())
                 .purchaseDate(request.purchaseDate())
+                .expiryDate(expiryDate)
                 .storageType(request.storageType())
                 .quantity(request.quantity())
+                .unit(request.unit())
                 .build();
     }
     

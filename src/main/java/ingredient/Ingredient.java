@@ -22,10 +22,12 @@ public class Ingredient {
     @Column(nullable = false)
     Integer defaultExpiry;
 
+    Integer frozenExpiry;
+    Integer ambientExpiry;
+    Integer refrigeratedExpiry;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private IngredientCategory ingredientCategory;
 
-    @Enumerated(EnumType.STRING)
-    private StorageType storageType;
 }

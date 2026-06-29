@@ -1,6 +1,7 @@
 package pantry.dto;
 
 import global.type.StorageType;
+import global.type.Unit;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -28,11 +29,16 @@ public final class PantryRequestDto {
             @NotNull(message =  "구매일은 필수입니다")
             LocalDate purchaseDate,
 
+            LocalDate expiryDate,
+
             @NotNull(message = "보관 방법은 필수입니다")
             StorageType storageType,
 
-            @Positive(message = "수량은 0보다 커야 합니다.")
-            Integer quantity
+            @Positive(message = "수량은 0보다 커야 합니다")
+            Integer quantity,
+
+            @NotNull(message = "단위가 있어야 합니다")
+            Unit unit
     ) {}
 
     // web에서 정보를 받아와서 개인 식재료 업데이트
