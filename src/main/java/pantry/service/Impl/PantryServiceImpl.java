@@ -7,11 +7,12 @@ import member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pantry.Pantry;
-import pantry.PantryRepository;
+import pantry.policy.ExpiryDatePolicy;
+import pantry.policy.SeasonalExpiryDatePolicy;
+import pantry.repository.PantryRepository;
 import pantry.dto.PantryRequestDto;
 import pantry.dto.PantryResponseDto;
 import pantry.service.PantryService;
-import recipe.RecipeRepository;
 
 import java.time.LocalDate;
 
@@ -22,11 +23,13 @@ public class PantryServiceImpl implements PantryService {
     private final PantryRepository pantryRepository;
     private final MemberRepository memberRepository;
     private final IngredientRepository ingredientRepository;
+    private final ExpiryDatePolicy expiryDatePolicy;
 
-    public PantryServiceImpl(PantryRepository pantryRepository, MemberRepository memberRepository, IngredientRepository ingredientRepository) {
+    public PantryServiceImpl(PantryRepository pantryRepository, MemberRepository memberRepository, IngredientRepository ingredientRepository, ExpiryDatePolicy expiryDatePolicy) {
         this.pantryRepository = pantryRepository;
         this.memberRepository = memberRepository;
         this.ingredientRepository = ingredientRepository;
+        this.expiryDatePolicy = expiryDatePolicy;
     }
 
     // DashBoard 화면 구성 데이터 반환 메소드
@@ -51,14 +54,40 @@ public class PantryServiceImpl implements PantryService {
     @Override
     @Transactional
     public void savePantry(Long memberId, PantryRequestDto.CreateRequest request) {
+
+        LocalDate finalExpiryDate;
+
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         Ingredient ingredient = ingredientRepository.findById(request.ingredientId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
 
-        Pantry pantry = Pantry.create(member, ingredient, request);
+        if (request.expiryDate() != null) {
+            finalExpiryDate = request.expiryDate();
+        } else {
+            finalExpiryDate = expiryDatePolicy.calculateExpiryDate(ingredient, request.purchaseDate(), request.storageType());
+        }
+        Pantry pantry = Pantry.create(member, ingredient, request, finalExpiryDate);
         pantryRepository.save(pantry);
+    }
+
+    @Override
+    @Transactional
+    public void updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request) {
+        Pantry pantry = pantryRepository.findById(pantryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
+
+        pantry.update(request);
+    }
+
+    @Override
+    @Transactional
+    public void deletePantry(Long pantryId) {
+        Pantry pantry = pantryRepository.findById(pantryId)
+                .orElseThrow(() -> new IllegalArgumentException("이미 삭제되었거나 존재하지 않는 식재료입니다."));
+
+        pantryRepository.deleteById(pantryId);
     }
 
 
