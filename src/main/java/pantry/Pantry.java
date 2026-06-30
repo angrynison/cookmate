@@ -73,28 +73,43 @@ public class Pantry {
     /*
     식재료 등록, 만료일자는 따로 policy를 두어서 작성할 예정
      */
-    public static Pantry create(Member member, Ingredient ingredient, PantryRequestDto.CreateRequest request, LocalDate expiryDate) {
+    public static Pantry create(
+            Member member,
+            Ingredient ingredient,
+            String name,
+            LocalDate purchaseDate,
+            LocalDate expiryDate,
+            StorageType storageType,
+            Integer quantity,
+            Unit unit
+    ) {
         return Pantry.builder()
                 .member(member)
                 .ingredient(ingredient)
-                .name(request.name())
-                .purchaseDate(request.purchaseDate())
+                .name(name)
+                .purchaseDate(purchaseDate)
                 .expiryDate(expiryDate)
-                .storageType(request.storageType())
-                .quantity(request.quantity())
-                .unit(request.unit())
+                .storageType(storageType)
+                .quantity(quantity)
+                .unit(unit)
                 .build();
     }
     
     /*
     식재료 업데이트
      */
-    public Pantry update(PantryRequestDto.UpdateRequest request) {
-        if (request.name() != null) this.name = request.name();
-        if (request.purchaseDate() != null) this.purchaseDate = request.purchaseDate();
-        if (request.expiryDate() != null) this.expiryDate = request.expiryDate();
-        if (request.storageType() != null) this.storageType = request.storageType();
-        if (request.quantity() != null) this.quantity = request.quantity();
+    public Pantry update(
+            String name,
+            LocalDate purchaseDate,
+            LocalDate expiryDate,
+            StorageType storageType,
+            Integer quantity
+    ) {
+        if (name != null) this.name = name;
+        if (purchaseDate != null) this.purchaseDate = purchaseDate;
+        if (expiryDate != null) this.expiryDate = expiryDate;
+        if (storageType != null) this.storageType = storageType;
+        if (quantity != null) this.quantity = quantity;
 
         return this;
     }
