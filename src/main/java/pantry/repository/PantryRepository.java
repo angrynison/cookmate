@@ -1,11 +1,14 @@
 package pantry.repository;
 
+import global.type.IngredientCategory;
+import ingredient.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pantry.Pantry;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface PantryRepository extends JpaRepository<Pantry, Long> {
 
@@ -20,4 +23,8 @@ public interface PantryRepository extends JpaRepository<Pantry, Long> {
      */
     @Query("SELECT COUNT(p) FROM Pantry p WHERE p.member = :memebrId AND p.expiryDate <= :soonDate")
     long countBysoonDate(@Param("memberId") Long memberId, @Param("soonDate") LocalDate soonDate);
+
+    // category 별 식재료 리스트반환
+    @Query("SELECT i FROM Pantry i WHERE i.ingredientCategory = :category")
+    List<Pantry> findByCategory(@Param("category") IngredientCategory category);
 }
