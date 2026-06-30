@@ -1,12 +1,17 @@
 package pantry.service;
 
+import global.type.IngredientCategory;
+import pantry.Pantry;
 import pantry.dto.PantryRequestDto;
 import pantry.dto.PantryResponseDto;
+
+import java.util.List;
 
 public interface PantryService {
 
     PantryResponseDto.SummaryResponse getPantrySummary(Long memberId);
-    void savePantry(Long memebrId, PantryRequestDto.CreateRequest request);
-    public void updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request);
-    public void deletePantry(Long pantryId);
+    Long savePantry(Long memebrId, PantryRequestDto.CreateRequest request);
+    Long updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request);
+    void deletePantry(Long pantryId);
+    List<Pantry> getPantryList(IngredientCategory category);
 }

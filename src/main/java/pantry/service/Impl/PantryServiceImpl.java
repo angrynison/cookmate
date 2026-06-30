@@ -1,5 +1,6 @@
 package pantry.service.Impl;
 
+import global.type.IngredientCategory;
 import ingredient.Ingredient;
 import ingredient.IngredientRepository;
 import member.MemberRepository;
@@ -8,13 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pantry.Pantry;
 import pantry.policy.ExpiryDatePolicy;
-import pantry.policy.SeasonalExpiryDatePolicy;
 import pantry.repository.PantryRepository;
 import pantry.dto.PantryRequestDto;
 import pantry.dto.PantryResponseDto;
 import pantry.service.PantryService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -53,7 +54,7 @@ public class PantryServiceImpl implements PantryService {
     // 보유 식재료 추가 메소드
     @Override
     @Transactional
-    public void savePantry(Long memberId, PantryRequestDto.CreateRequest request) {
+    public Long savePantry(Long memberId, PantryRequestDto.CreateRequest request) {
 
         LocalDate finalExpiryDate;
 
@@ -68,17 +69,36 @@ public class PantryServiceImpl implements PantryService {
         } else {
             finalExpiryDate = expiryDatePolicy.calculateExpiryDate(ingredient, request.purchaseDate(), request.storageType());
         }
-        Pantry pantry = Pantry.create(member, ingredient, request, finalExpiryDate);
+        Pantry pantry = Pantry.create(
+                member,
+                ingredient,
+                request.name(),
+                request.purchaseDate(),
+                finalExpiryDate,
+                request.storageType(),
+                request.quantity(),
+                request.unit()
+        );
         pantryRepository.save(pantry);
+
+        return pantry.getId();
     }
 
     @Override
     @Transactional
-    public void updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request) {
+    public Long updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request) {
         Pantry pantry = pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
 
-        pantry.update(request);
+        pantry.update(
+                request.name(),
+                request.purchaseDate(),
+                request.expiryDate(),
+                request.storageType(),
+                request.quantity()
+        );
+
+        return pantry.getId();
     }
 
     @Override
@@ -90,6 +110,8 @@ public class PantryServiceImpl implements PantryService {
         pantryRepository.deleteById(pantryId);
     }
 
-
-
+    @Override
+    public List<Pantry> getPantryList(IngredientCategory category) {
+        return pantryRepository.findByCategory(category);
+    }
 }
