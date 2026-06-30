@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
-import pantry.Pantry;
 
 import java.time.LocalDate;
 
