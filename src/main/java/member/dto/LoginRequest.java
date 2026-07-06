@@ -1,6 +1,6 @@
 package member.dto;
 
-public record JoinDto(
+public record LoginRequest(
         String loginId,
         String password
 ) {
