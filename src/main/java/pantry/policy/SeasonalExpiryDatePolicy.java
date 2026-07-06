@@ -2,7 +2,7 @@ package pantry.policy;
 
 import global.error.InvalidExpiryDateException;
 import global.type.StorageType;
-import ingredient.Ingredient;
+import ingredient.domain.Ingredient;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

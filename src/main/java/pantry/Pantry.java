@@ -1,13 +1,12 @@
 package pantry;
 
 import global.type.IngredientCategory;
-import ingredient.Ingredient;
+import ingredient.domain.Ingredient;
 import member.domain.Member;
 import global.type.StorageType;
 import global.type.Unit;
 import jakarta.persistence.*;
 import lombok.*;
-import pantry.dto.PantryRequestDto;
 
 import java.time.LocalDate;
 

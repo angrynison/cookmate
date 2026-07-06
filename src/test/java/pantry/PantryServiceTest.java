@@ -2,10 +2,8 @@ package pantry;
 
 import global.type.StorageType;
 import global.type.Unit;
-import ingredient.Ingredient;
-import ingredient.IngredientRepository;
+import ingredient.repository.IngredientRepository;
 import member.MemberRepository;
-import member.domain.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,15 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.expression.spel.ast.NullLiteral;
 import pantry.dto.PantryRequestDto;
 import pantry.repository.PantryRepository;
 import pantry.service.Impl.PantryServiceImpl;
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

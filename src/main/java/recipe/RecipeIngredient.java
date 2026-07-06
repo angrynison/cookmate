@@ -1,6 +1,6 @@
 package recipe;
 
-import ingredient.Ingredient;
+import ingredient.domain.Ingredient;
 import global.type.Unit;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,8 +1,8 @@
 package pantry.service.Impl;
 
 import global.type.IngredientCategory;
-import ingredient.Ingredient;
-import ingredient.IngredientRepository;
+import ingredient.domain.Ingredient;
+import ingredient.repository.IngredientRepository;
 import member.MemberRepository;
 import member.domain.Member;
 import org.springframework.stereotype.Service;
