@@ -1,5 +1,6 @@
 package member.service.Impl;
 
+import global.security.JwtProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import member.domain.Member;
@@ -17,6 +18,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     // 회원가입
     @Override
@@ -46,16 +48,26 @@ public class MemberServiceImpl implements MemberService {
         return newMember.getId();
     }
 
+    // 로그인
     @Override
     @Transactional
     public JwtResponse login(LoginRequest loginRequest) {
 
+        // 프론트가 보낸 아이디로 DB에서 회원 조회
+        Member member = memberRepository.findByLoginId(loginRequest.loginId())
+                .orElseThrow(() -> new IllegalArgumentException("loginId not found"));
 
 
+        // 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(loginRequest.password(), member.getPassword())) {
+            throw new IllegalArgumentException("password not match");
+        }
+
+        // 로그인이 성공했다면 토큰 발급
+        String accessToken = jwtProvider.createToken(member.getId(), "USER");
 
 
-
-        return null;
+        return new JwtResponse(accessToken);
     }
 
 
