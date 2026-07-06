@@ -1,7 +1,7 @@
 package pantry.policy;
 
 import global.type.StorageType;
-import ingredient.Ingredient;
+import ingredient.domain.Ingredient;
 
 import java.time.LocalDate;
 

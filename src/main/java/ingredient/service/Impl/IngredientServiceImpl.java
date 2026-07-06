@@ -1,6 +1,10 @@
-package ingredient;
+package ingredient.service.Impl;
 
 import global.type.IngredientCategory;
+import ingredient.domain.Ingredient;
+import ingredient.repository.IngredientRepository;
+import ingredient.dto.IngredientRequestDto;
+import ingredient.service.IngredientService;
 
 import java.util.List;
 

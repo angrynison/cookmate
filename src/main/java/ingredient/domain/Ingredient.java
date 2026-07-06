@@ -1,7 +1,6 @@
-package ingredient;
+package ingredient.domain;
 
 import global.type.IngredientCategory;
-import global.type.StorageType;
 import jakarta.persistence.*;
 import lombok.*;
 

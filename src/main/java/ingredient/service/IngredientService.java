@@ -1,6 +1,8 @@
-package ingredient;
+package ingredient.service;
 
 import global.type.IngredientCategory;
+import ingredient.domain.Ingredient;
+import ingredient.dto.IngredientRequestDto;
 
 import java.util.List;
 
