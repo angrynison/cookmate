@@ -3,7 +3,7 @@ package pantry.service.Impl;
 import global.type.IngredientCategory;
 import ingredient.domain.Ingredient;
 import ingredient.repository.IngredientRepository;
-import member.MemberRepository;
+import member.repository.MemberRepository;
 import member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

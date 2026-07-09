@@ -10,9 +10,10 @@ import pantry.Pantry;
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor
 @Builder
 public class PantryResponseDto {
+
+    private PantryResponseDto() {}
 
     // 백엔드 데이터(dashboard) 응답 반환
     public record DashboardResponse(
