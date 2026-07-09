@@ -3,7 +3,7 @@ package pantry;
 import global.type.StorageType;
 import global.type.Unit;
 import ingredient.repository.IngredientRepository;
-import member.MemberRepository;
+import member.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
