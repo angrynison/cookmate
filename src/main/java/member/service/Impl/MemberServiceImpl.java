@@ -4,18 +4,19 @@ import global.security.JwtProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import member.domain.Member;
-import member.dto.JoinRequest;
-import member.dto.LoginRequest;
-import member.dto.JwtResponse;
-import member.MemberRepository;
+import member.dto.MemberRequestDto;
+import member.dto.MemberResponseDto;
+import member.repository.MemberRepository;
 import member.service.MemberService;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pantry.repository.PantryRepository;
 
 @Service
 @RequiredArgsConstructor // 불변 변수 자동주입
 public class MemberServiceImpl implements MemberService {
 
+    private final PantryRepository pantryRepository;
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
@@ -23,10 +24,10 @@ public class MemberServiceImpl implements MemberService {
     // 회원가입
     @Override
     @Transactional
-    public Long join(JoinRequest joinRequest) {
+    public Long join(MemberRequestDto.JoinRequest joinRequest) {
 
         // 회원가입 요청 Null 검사
-        if (joinRequest == null || joinRequest.loginId() == null || joinRequest.password() == null) {
+        if (joinRequest == null || joinRequest.loginId() == null || joinRequest.password() == null || joinRequest.name() == null) {
             throw new IllegalArgumentException("form is empty");
         }
 
@@ -35,10 +36,15 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("loginId is already in use");
         }
 
+        if (memberRepository.existsByName(joinRequest.name())) {
+            throw new IllegalArgumentException("name is already in use");
+        }
+
         // 비밀번호 암호화 (사용자가 입력한 비밀번호를 알아볼 수 없게 변경)
         String encodedPassword = passwordEncoder.encode(joinRequest.password());
 
         Member newMember = Member.builder()
+                .name(joinRequest.name())
                 .loginId(joinRequest.loginId())
                 .password(encodedPassword)
                 .build();
@@ -51,7 +57,7 @@ public class MemberServiceImpl implements MemberService {
     // 로그인
     @Override
     @Transactional
-    public JwtResponse login(LoginRequest loginRequest) {
+    public MemberResponseDto.JwtTokenResponse login(MemberRequestDto.LoginRequest loginRequest) {
 
         // 프론트가 보낸 아이디로 DB에서 회원 조회
         Member member = memberRepository.findByLoginId(loginRequest.loginId())
@@ -67,8 +73,63 @@ public class MemberServiceImpl implements MemberService {
         String accessToken = jwtProvider.createToken(member.getId(), "USER");
 
 
-        return new JwtResponse(accessToken);
+        return new MemberResponseDto.JwtTokenResponse(accessToken);
+    }
+
+    // 일단 보류
+    @Override
+    public MemberResponseDto.JwtTokenResponse logout() {
+        return null;
     }
 
 
+    // 회원 정보 조회
+    @Override
+    public MemberResponseDto.MemberProfileResponse getMyProfile(Long id) {
+        Member profileMember = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        return MemberResponseDto.MemberProfileResponse.from(profileMember);
+    }
+
+    // 프로필 등록
+    @Override
+    public Long createProfile(MemberRequestDto.MemberProfileRequest profileRequest) {
+
+        Member profileMember = memberRepository.findById(profileRequest.id())
+                .orElseThrow(() -> new IllegalArgumentException("Member could not found"));
+
+        if (profileRequest.sex() == null) {
+            throw new IllegalArgumentException("SEX must not be null");
+        }
+
+        profileMember.createProfile(profileMember.getSex(), profileMember.getCuisines());
+
+        return profileMember.getId();
+    }
+
+    // 회원 탈퇴
+    @Override
+    public void deleteMember(Long id) {
+        // 성능 면에서 on delete Cascade가 아닌 pantryRepository JPA를 사용
+        pantryRepository.deleteById(id);
+        memberRepository.deleteById(id);
+    }
+
+    // 회원정보 수정
+    @Override
+    @Transactional
+    public Long updateMember(MemberRequestDto.MemberEditRequest editRequest) {
+
+        if (!passwordEncoder.matches(editRequest.password(), editRequest.password())) {
+            throw new IllegalArgumentException("password not match");
+        }
+
+        Member editMember = memberRepository.findById(editRequest.id())
+                .orElseThrow(() -> new IllegalArgumentException("member not found"));
+
+        editMember.update(editRequest.name(), editRequest.loginId(), editRequest.password());
+
+        return editMember.getId();
+    }
 }

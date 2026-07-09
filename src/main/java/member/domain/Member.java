@@ -3,6 +3,7 @@ package member.domain;
 import global.type.Cuisine;
 import jakarta.persistence.*;
 import lombok.*;
+import member.dto.MemberRequestDto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,11 +40,35 @@ public class Member {
     @Column(name = "cuisine_type")
     private Set<Cuisine> cuisines = new HashSet<>();
 
-
-
     public enum Sex {
         남,
         녀
     }
+
+
+    // 최초 프로필 등록
+    public void createProfile(Sex sex, Set<Cuisine> cuisines) {
+        this.sex = sex;
+        this.cuisines.addAll(cuisines);
+    }
+
+    // 회원 정보 수정
+    public void update(
+            String name,
+            String loginId,
+            String password
+    ) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (loginId != null) {
+            this.loginId = loginId;
+        }
+        if (password != null) {
+            this.password = password;
+        }
+    }
+
+
 
 }
