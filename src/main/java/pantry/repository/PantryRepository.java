@@ -26,4 +26,6 @@ public interface PantryRepository extends JpaRepository<Pantry, Long> {
     // category 별 식재료 리스트반환
     @Query("SELECT i FROM Pantry i WHERE i.ingredientCategory = :category")
     List<Pantry> findByCategory(@Param("category") IngredientCategory category);
+
+    void deleteByMemberId(Long memberId);
 }
