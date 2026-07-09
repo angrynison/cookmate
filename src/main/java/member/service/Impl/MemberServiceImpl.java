@@ -94,9 +94,9 @@ public class MemberServiceImpl implements MemberService {
 
     // 프로필 등록
     @Override
-    public Long createProfile(MemberRequestDto.MemberProfileRequest profileRequest) {
+    public Long createProfile(Long id, MemberRequestDto.MemberProfileRequest profileRequest) {
 
-        Member profileMember = memberRepository.findById(profileRequest.id())
+        Member profileMember = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Member could not found"));
 
         if (profileRequest.sex() == null) {
@@ -119,13 +119,13 @@ public class MemberServiceImpl implements MemberService {
     // 회원정보 수정
     @Override
     @Transactional
-    public Long updateMember(MemberRequestDto.MemberEditRequest editRequest) {
+    public Long updateMember(Long id,MemberRequestDto.MemberEditRequest editRequest) {
 
         if (!passwordEncoder.matches(editRequest.password(), editRequest.password())) {
             throw new IllegalArgumentException("password not match");
         }
 
-        Member editMember = memberRepository.findById(editRequest.id())
+        Member editMember = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("member not found"));
 
         editMember.update(editRequest.name(), editRequest.loginId(), editRequest.password());

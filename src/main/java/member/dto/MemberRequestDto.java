@@ -26,7 +26,6 @@ public class MemberRequestDto {
 
     // 최초 프로필 등록 dto
     public record MemberProfileRequest(
-            Long id,
             Member.Sex sex,
             Set<Cuisine> cuisines
     ) {
@@ -34,7 +33,6 @@ public class MemberRequestDto {
 
     // 회원 정보 수정 dto
     public record MemberEditRequest(
-            Long id,
             String loginId,
             String password,
             String name
