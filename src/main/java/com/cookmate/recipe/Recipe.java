@@ -1,0 +1,52 @@
+package com.cookmate.recipe;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "recipe")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class Recipe {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    String title;
+    @Column(nullable = false)
+    String content;
+
+    String imageUrl;
+    String source;
+    Integer cost;
+    String cookingTime;
+
+    @Enumerated(EnumType.STRING)
+    private Level level;
+
+    /* 
+    @Builder.Default는 빈 리스트로 안전하게 초기화 해두는것
+    하나의 레시피는 많은 레시피 재료들을 가진다
+    db에서는 왜래키로 양쪽 매핑을 하지만 java 객체 세상에서는 양쪽 클래스에 서로를 향한
+    변수를 적는다 관계의 주인을 recipe_ingredient의 recipe로 알려주는것
+    cascade = CascadeType.ALL은 RecipeIngredient들을 세트로 같이 저장하게 설정
+     */
+    @Builder.Default
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+    public enum Level {
+        Level0,
+        Level1,
+        Level2,
+        Level3,
+        Level4,
+        Level5,
+    }
+}

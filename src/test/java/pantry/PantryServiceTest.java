@@ -1,9 +1,10 @@
 package pantry;
 
-import global.type.StorageType;
-import global.type.Unit;
-import ingredient.repository.IngredientRepository;
-import member.repository.MemberRepository;
+import com.cookmate.global.type.StorageType;
+import com.cookmate.global.type.Unit;
+import com.cookmate.ingredient.repository.IngredientRepository;
+import com.cookmate.member.repository.MemberRepository;
+import com.cookmate.pantry.Pantry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import pantry.dto.PantryRequestDto;
-import pantry.repository.PantryRepository;
-import pantry.service.Impl.PantryServiceImpl;
+import com.cookmate.pantry.dto.PantryRequestDto;
+import com.cookmate.pantry.repository.PantryRepository;
+import com.cookmate.pantry.service.Impl.PantryServiceImpl;
 import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
