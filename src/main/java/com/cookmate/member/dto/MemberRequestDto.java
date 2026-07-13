@@ -27,14 +27,14 @@ public class MemberRequestDto {
     }
 
     // 최초 프로필 등록 dto
-    public record MemberProfileRequest(
+    public record ProfileRequest(
             Member.Sex sex,
             Set<Cuisine> cuisines
     ) {
     }
 
     // 회원 정보 수정 dto
-    public record MemberEditRequest(
+    public record EditRequest(
             String loginId,
             String password,
             String name

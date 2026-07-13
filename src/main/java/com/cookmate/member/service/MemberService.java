@@ -14,9 +14,9 @@ public interface MemberService {
     // 회원 정보 조회
     public MemberResponseDto.MemberProfileResponse getMyProfile(Long id);
     // 최초 프로필 생성
-    public Long createProfile(Long id,MemberRequestDto.MemberProfileRequest memberProfileRequest);
+    public Long createProfile(Long id,MemberRequestDto.ProfileRequest profileRequest);
     // 회원정보 수정
-    public Long updateMember(Long id, MemberRequestDto.MemberEditRequest editRequest);
+    public Long updateMember(Long id, MemberRequestDto.EditRequest editRequest);
     // 회원 삭제
     public void deleteMember(Long id);
 }

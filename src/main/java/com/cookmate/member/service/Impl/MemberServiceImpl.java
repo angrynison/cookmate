@@ -24,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
     private final JwtProvider jwtProvider;
 
     @Value("${jwt.adminToken}")
-    private final String adminToken;
+    private String adminToken;
 
 
     // 회원가입
@@ -108,7 +108,7 @@ public class MemberServiceImpl implements MemberService {
 
     // 프로필 등록
     @Override
-    public Long createProfile(Long id, MemberRequestDto.MemberProfileRequest profileRequest) {
+    public Long createProfile(Long id, MemberRequestDto.ProfileRequest profileRequest) {
 
         Member profileMember = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Member could not found"));
@@ -133,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
     // 회원정보 수정
     @Override
     @Transactional
-    public Long updateMember(Long id,MemberRequestDto.MemberEditRequest editRequest) {
+    public Long updateMember(Long id, MemberRequestDto.EditRequest editRequest) {
 
         if (!passwordEncoder.matches(editRequest.password(), editRequest.password())) {
             throw new IllegalArgumentException("password not match");
