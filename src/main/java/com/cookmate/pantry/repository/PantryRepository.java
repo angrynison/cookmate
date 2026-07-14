@@ -1,6 +1,7 @@
 package com.cookmate.pantry.repository;
 
 import com.cookmate.global.type.IngredientCategory;
+import com.cookmate.pantry.dto.PantryResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,8 +25,8 @@ public interface PantryRepository extends JpaRepository<Pantry, Long> {
     long countBysoonDate(@Param("memberId") Long memberId, @Param("soonDate") LocalDate soonDate);
 
     // category 별 식재료 리스트반환
-    @Query("SELECT i FROM Pantry i WHERE i.ingredientCategory = :category")
-    List<Pantry> findByCategory(@Param("category") IngredientCategory category);
+    @Query("SELECT i FROM Pantry i WHERE i.member = :memberId AND i.ingredientCategory = :category")
+    List<Pantry> findByCategory(@Param("memberId") Long memberId, @Param("category") IngredientCategory category);
 
     void deleteByMemberId(Long memberId);
 }
