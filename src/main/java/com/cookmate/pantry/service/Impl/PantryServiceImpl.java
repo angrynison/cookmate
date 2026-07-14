@@ -54,20 +54,25 @@ public class PantryServiceImpl implements PantryService {
     // 보유 식재료 추가 메소드
     @Override
     @Transactional
-    public Long savePantry(Long memberId, PantryRequestDto.CreateRequest request) {
+    public Long createPantry(Long memberId, PantryRequestDto.CreateRequest request) {
 
         LocalDate finalExpiryDate;
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
-        Ingredient ingredient = ingredientRepository.findById(request.ingredientId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
+        Ingredient ingredient = null;
+        if (request.ingredientId() != null) {
+            ingredient = ingredientRepository.findById(request.ingredientId())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
+        }
 
         if (request.expiryDate() != null) {
             finalExpiryDate = request.expiryDate();
-        } else {
+        } else if (ingredient != null){
             finalExpiryDate = expiryDatePolicy.calculateExpiryDate(ingredient, request.purchaseDate(), request.storageType());
+        } else {
+            throw new IllegalArgumentException("기본 식재료가 아닐 경우, 유통기한을 반드시 직접 입력해야 합니다.");
         }
         Pantry pantry = Pantry.create(
                 member,
@@ -104,14 +109,18 @@ public class PantryServiceImpl implements PantryService {
     @Override
     @Transactional
     public void deletePantry(Long pantryId) {
-        Pantry pantry = pantryRepository.findById(pantryId)
+        pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("이미 삭제되었거나 존재하지 않는 식재료입니다."));
 
         pantryRepository.deleteById(pantryId);
     }
 
     @Override
-    public List<Pantry> getPantryList(IngredientCategory category) {
-        return pantryRepository.findByCategory(category);
+    public List<PantryResponseDto.PantryResponse> getPantryList(Long memberId, IngredientCategory category) {
+        List<Pantry> pantries =  pantryRepository.findByCategory(memberId, category);
+
+        return pantries.stream()
+                .map(PantryResponseDto.PantryResponse::from)
+                .toList();
     }
 }
