@@ -2,10 +2,13 @@ package com.cookmate.member.domain;
 
 import com.cookmate.global.type.Cuisine;
 import com.cookmate.global.type.Role;
+import com.cookmate.pantry.Pantry;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,6 +29,9 @@ public class Member {
     String loginId;
     @Column(nullable = false)
     String password;
+
+    @OneToMany(mappedBy = "member")
+    List<Pantry> pantries = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Sex sex;
