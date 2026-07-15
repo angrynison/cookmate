@@ -1,4 +1,4 @@
-package com.cookmate.pantry;
+package com.cookmate.pantry.domain;
 
 import com.cookmate.global.type.IngredientCategory;
 import com.cookmate.ingredient.domain.Ingredient;

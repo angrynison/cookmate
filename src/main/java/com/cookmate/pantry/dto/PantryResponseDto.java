@@ -2,7 +2,7 @@ package com.cookmate.pantry.dto;
 
 import com.cookmate.global.type.StorageType;
 import com.cookmate.global.type.Unit;
-import com.cookmate.pantry.Pantry;
+import com.cookmate.pantry.domain.Pantry;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,11 +1,10 @@
 package com.cookmate.pantry.repository;
 
 import com.cookmate.global.type.IngredientCategory;
-import com.cookmate.pantry.dto.PantryResponseDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import com.cookmate.pantry.Pantry;
+import com.cookmate.pantry.domain.Pantry;
 
 import java.time.LocalDate;
 import java.util.List;

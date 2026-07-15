@@ -1,7 +1,6 @@
-package com.cookmate.pantry.controller;
+package com.cookmate.pantry;
 
 import com.cookmate.global.type.IngredientCategory;
-import com.cookmate.pantry.Pantry;
 import com.cookmate.pantry.dto.PantryRequestDto;
 import com.cookmate.pantry.dto.PantryResponseDto;
 import com.cookmate.pantry.service.PantryService;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

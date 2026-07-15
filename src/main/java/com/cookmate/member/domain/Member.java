@@ -2,7 +2,7 @@ package com.cookmate.member.domain;
 
 import com.cookmate.global.type.Cuisine;
 import com.cookmate.global.type.Role;
-import com.cookmate.pantry.Pantry;
+import com.cookmate.pantry.domain.Pantry;
 import jakarta.persistence.*;
 import lombok.*;
 

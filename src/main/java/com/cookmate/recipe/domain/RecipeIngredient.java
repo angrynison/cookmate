@@ -1,4 +1,4 @@
-package com.cookmate.recipe;
+package com.cookmate.recipe.domain;
 
 import com.cookmate.ingredient.domain.Ingredient;
 import com.cookmate.global.type.Unit;

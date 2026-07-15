@@ -1,4 +1,4 @@
-package com.cookmate.recipe;
+package com.cookmate.recipe.domain;
 import jakarta.persistence.*;
 import lombok.*;
 

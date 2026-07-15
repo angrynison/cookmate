@@ -7,7 +7,7 @@ import com.cookmate.member.repository.MemberRepository;
 import com.cookmate.member.domain.Member;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.cookmate.pantry.Pantry;
+import com.cookmate.pantry.domain.Pantry;
 import com.cookmate.pantry.policy.ExpiryDatePolicy;
 import com.cookmate.pantry.repository.PantryRepository;
 import com.cookmate.pantry.dto.PantryRequestDto;
