@@ -17,7 +17,7 @@ public class PantryResponseDto {
 
     // 백엔드 데이터(dashboard) 응답 반환
     public record PantryResponse(
-            Long id,
+            Long pantryId,
             String name,
             LocalDate purchaseDate,
             LocalDate expiryDate,

@@ -4,7 +4,7 @@ import com.cookmate.global.type.StorageType;
 import com.cookmate.global.type.Unit;
 import com.cookmate.ingredient.repository.IngredientRepository;
 import com.cookmate.member.repository.MemberRepository;
-import com.cookmate.pantry.Pantry;
+import com.cookmate.pantry.domain.Pantry;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,8 +104,8 @@ public class PantryServiceTest {
 //        given(ingredientRepository.findById(ingredient2)).willReturn(Optional.of(mockIngredient2));
 
         //when
-        pantryService.savePantry(member1, request1);
-        pantryService.savePantry(member2, request2);
+        pantryService.createPantry(member1, request1);
+        pantryService.createPantry(member2, request2);
 
         //then
         verify(pantryRepository, times(2)).save(any(Pantry.class));
@@ -138,7 +138,7 @@ public class PantryServiceTest {
 //        given(memberRepository.findById(memberId)).willReturn(Optional.of(mockMember1));
 //        given(ingredientRepository.findById(ingredientId)).willReturn(Optional.of(mockIngredient1));
 
-        Long pantryId = pantryService.savePantry(memberId, request);
+        Long pantryId = pantryService.createPantry(memberId, request);
 
         Pantry pantry1 = pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("보유하지 않은 식재료입니다."));
@@ -155,7 +155,7 @@ public class PantryServiceTest {
         );
 
         //when
-        pantryService.updatePantry(pantryId, updateRequest);
+        pantryService.updatePantry(pantryId, ingredientId, updateRequest);
 
         LocalDate afterExpiry = pantry1.getExpiryDate();
         Integer afterQuantity = pantry1.getQuantity();

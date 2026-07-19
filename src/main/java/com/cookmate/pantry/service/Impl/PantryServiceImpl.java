@@ -5,6 +5,8 @@ import com.cookmate.ingredient.domain.Ingredient;
 import com.cookmate.ingredient.repository.IngredientRepository;
 import com.cookmate.member.repository.MemberRepository;
 import com.cookmate.member.domain.Member;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cookmate.pantry.domain.Pantry;
@@ -13,6 +15,7 @@ import com.cookmate.pantry.repository.PantryRepository;
 import com.cookmate.pantry.dto.PantryRequestDto;
 import com.cookmate.pantry.dto.PantryResponseDto;
 import com.cookmate.pantry.service.PantryService;
+import org.springframework.web.bind.annotation.RequestAttribute;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -89,9 +92,14 @@ public class PantryServiceImpl implements PantryService {
         return pantry.getId();
     }
 
+    // 보유 식재료 수정 메소드
     @Override
     @Transactional
-    public Long updatePantry(Long pantryId, PantryRequestDto.UpdateRequest request) {
+    public Long updatePantry(Long memberId, Long pantryId, PantryRequestDto.UpdateRequest request) {
+
+        memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException(("존재하지 않는 회원입니다.")));
+
         Pantry pantry = pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
 
@@ -106,15 +114,17 @@ public class PantryServiceImpl implements PantryService {
         return pantry.getId();
     }
 
+    // 보유 식재료 삭제 메소드
     @Override
     @Transactional
-    public void deletePantry(Long pantryId) {
+    public void deletePantry(Long memberId, Long pantryId) {
         pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("이미 삭제되었거나 존재하지 않는 식재료입니다."));
 
         pantryRepository.deleteById(pantryId);
     }
 
+    // 카테고리별 보유 식재료 반환 메소드
     @Override
     public List<PantryResponseDto.PantryResponse> getPantryList(Long memberId, IngredientCategory category) {
         List<Pantry> pantries =  pantryRepository.findByCategory(memberId, category);

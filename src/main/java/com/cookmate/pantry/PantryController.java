@@ -15,52 +15,56 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/pantry")
+@RequestMapping("/api/user/pantry")
 @RequiredArgsConstructor
 public class PantryController {
 
     private final PantryService pantryService;
 
+    // DashBoard 화면 요약 데이터 반환
+    @GetMapping("/summary")
+    public ResponseEntity<PantryResponseDto.SummaryResponse> getPantrySummary(@RequestAttribute("memberId") Long memberId) {
+        return ResponseEntity.ok(pantryService.getPantrySummary(memberId));
+    }
+    
     // 카테고리별 보유 식재료 반환
     @GetMapping
     public ResponseEntity<List<PantryResponseDto.PantryResponse>> getPantriesByCategory(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestAttribute("memberId") Long memberId,
             @RequestParam(name = "category")IngredientCategory ingredientCategory
             ) {
 
-        Long id = Long.parseLong(userDetails.getUsername());
-
-        List<PantryResponseDto.PantryResponse> pantryList = pantryService.getPantryList(id, ingredientCategory);
+        List<PantryResponseDto.PantryResponse> pantryList = pantryService.getPantryList(memberId, ingredientCategory);
         return ResponseEntity.ok(pantryList);
     }
 
     // 보유 식재료 등록
     @PostMapping
     public ResponseEntity<Long> createPantry(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestAttribute("memberId") Long memberId,
             @RequestBody PantryRequestDto.CreateRequest createRequest) {
 
-        Long id = Long.parseLong(userDetails.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(pantryService.createPantry(id, createRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pantryService.createPantry(memberId, createRequest));
     }
 
     // 보유 식재료 수정
-    @PatchMapping
+    @PatchMapping("/{ingredientId}")
     public ResponseEntity<Long> updatePantry(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestAttribute("memberId") Long memberId,
+            @PathVariable("ingredientId") Long ingredientId,
             @RequestBody PantryRequestDto.UpdateRequest updateRequest
     ) {
-        Long id = Long.parseLong(userDetails.getUsername());
-        return ResponseEntity.ok(pantryService.updatePantry(id, updateRequest));
+        return ResponseEntity.ok(pantryService.updatePantry(memberId, ingredientId, updateRequest));
     }
 
     // 보유 식재료 삭제
-    @DeleteMapping
+    @DeleteMapping("/{ingredientId}")
     public void deletePantry(
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable("ingredientId") Long ingredientId
     ) {
-        Long id = Long.parseLong(userDetails.getUsername());
-        pantryService.deletePantry(id);
+        Long memberId = Long.parseLong(userDetails.getUsername());
+        pantryService.deletePantry(memberId, ingredientId);
     }
 
 }
