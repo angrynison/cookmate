@@ -45,10 +45,10 @@ public class SecurityConfig {
                 // API 주소별 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         // 사용자 전용 API
-                        .requestMatchers("/api/user/signup", "/api/user/login").permitAll().requestMatchers("/api/user").hasRole("USER")
+                        .requestMatchers("/api/user/signup", "/api/user/login").permitAll().requestMatchers("/api/user/**").hasRole("USER")
 
                         // 관리자 전용 API.
-                        .requestMatchers("/api/admin/signup", "/api/admin/login").permitAll().requestMatchers("/api/admin").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/signup", "/api/admin/login").permitAll().requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // 그 외의 모든 요청은 인증 요구
                         .anyRequest().authenticated()
