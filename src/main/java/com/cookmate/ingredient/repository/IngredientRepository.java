@@ -11,6 +11,7 @@ import java.util.List;
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
     Ingredient findByName(String name);
+    Boolean existsByName(String name);
 
     // category 별 식재료 리스트반환
     @Query("SELECT i FROM Ingredient i WHERE i.ingredientCategory = :category")
