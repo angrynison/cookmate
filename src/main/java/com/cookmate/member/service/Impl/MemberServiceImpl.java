@@ -46,9 +46,10 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("name is already in use");
         }
 
+        // 기본 회원가입은 USER(사용자) 권한 부여
         Role role = Role.USER;
         if (joinRequest.isAdmin()) {
-            if (!joinRequest.adminToken().equals(adminToken)) {
+            if (!joinRequest.adminToken().equals(adminToken)) { // 서버 비밀키 검사
                 throw new IllegalArgumentException("adminToken is wrong");
             }
             role = Role.ADMIN;
