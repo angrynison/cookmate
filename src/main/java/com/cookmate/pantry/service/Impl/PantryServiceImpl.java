@@ -127,9 +127,9 @@ public class PantryServiceImpl implements PantryService {
     // 카테고리별 보유 식재료 반환 메소드
     @Override
     public List<PantryResponseDto.PantryResponse> getPantryList(Long memberId, IngredientCategory category) {
-        List<Pantry> pantries =  pantryRepository.findByCategory(memberId, category);
+        List<Pantry> pantryList =  pantryRepository.findByCategory(memberId, category);
 
-        return pantries.stream()
+        return pantryList.stream()
                 .map(PantryResponseDto.PantryResponse::from)
                 .toList();
     }
