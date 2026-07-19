@@ -30,7 +30,6 @@ public class IngredientRequestDto {
     public record UpdateRequest(
 
             String name,
-
             Integer defaultExpiry,
             Integer frozenExpiry,
             Integer ambientExpiry,
