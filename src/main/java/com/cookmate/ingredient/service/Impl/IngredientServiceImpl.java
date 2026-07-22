@@ -33,8 +33,8 @@ public class IngredientServiceImpl implements IngredientService {
                 request.ingredientCategory()
                 );
 
-        ingredientRepository.save(ingredient);
-        return ingredient.getId();
+        Ingredient savedIngredient = ingredientRepository.save(ingredient);
+        return savedIngredient.getId();
     }
 
     // 기본 재료 정보 수정
