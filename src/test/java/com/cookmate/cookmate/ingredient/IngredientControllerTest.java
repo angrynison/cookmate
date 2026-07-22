@@ -1,4 +1,4 @@
-package ingredient;
+package com.cookmate.cookmate.ingredient;
 
 public class IngredientControllerTest {
 }
