@@ -1,4 +1,4 @@
-package pantry;
+package com.cookmate.cookmate.pantry;
 
 import com.cookmate.global.type.StorageType;
 import com.cookmate.global.type.Unit;
