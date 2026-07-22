@@ -11,16 +11,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+//단위 테스트 라서 SpringBootTest 어노테이션 삭제
 //Junit 5, Mockito
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 public class IngredientServiceTest {
 
     // 테스트 객체
