@@ -30,6 +30,7 @@ public class Member {
     @Column(nullable = false)
     String password;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member")
     List<Pantry> pantries = new ArrayList<>();
 
@@ -41,6 +42,7 @@ public class Member {
     private Role role;
 
     // 음식 선호도 다중 값을 저장하기 위한 memebr - memebr_cuisine의 many to one 매핑 테이블 생성
+    @Builder.Default
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(
             name = "member_cuisine",
