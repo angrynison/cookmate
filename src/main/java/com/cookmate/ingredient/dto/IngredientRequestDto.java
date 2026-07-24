@@ -27,6 +27,7 @@ public class IngredientRequestDto {
             IngredientCategory ingredientCategory
     ) {}
 
+    @Builder
     public record UpdateRequest(
 
             String name,
