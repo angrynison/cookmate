@@ -11,8 +11,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -63,5 +67,33 @@ public class IngredientServiceTest {
         verify(ingredientRepository, times(2)).save(any(Ingredient.class));
     }
     
+    @Test
+    @DisplayName("기본 재료 정보 수정 테스트")
+    void updateIngredient() {
+
+        Long targetId = 15L;
+        Ingredient ingredient = Ingredient.builder()
+                .id(targetId)
+                .name("대파")
+                .ambientExpiry(2)
+                .defaultExpiry(10)
+                .refrigeratedExpiry(15)
+                .ingredientCategory(IngredientCategory.채소류)
+                .build();
+
+        IngredientRequestDto.UpdateRequest updateRequest = IngredientRequestDto.UpdateRequest.builder()
+                .ambientExpiry(5)
+                .refrigeratedExpiry(10)
+                .build();
+
+        given(ingredientRepository.findById(targetId)).willReturn(Optional.ofNullable(ingredient));
+        Long updatedIngredient = ingredientService.updateIngredient(targetId, updateRequest);
+
+
+        assertThat(ingredient.getAmbientExpiry()).isEqualTo(5);
+        assertThat(ingredient.getRefrigeratedExpiry()).isEqualTo(10);
+    }
+
+
     
 }
