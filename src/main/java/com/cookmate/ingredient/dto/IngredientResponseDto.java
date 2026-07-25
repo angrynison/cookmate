@@ -2,9 +2,11 @@ package com.cookmate.ingredient.dto;
 
 import com.cookmate.global.type.IngredientCategory;
 import com.cookmate.ingredient.domain.Ingredient;
+import lombok.Builder;
 
 public class IngredientResponseDto {
 
+    @Builder
     public record IngredientResponse(
             Long id,
             String name,
