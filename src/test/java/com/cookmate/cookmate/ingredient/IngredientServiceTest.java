@@ -3,6 +3,7 @@ package com.cookmate.cookmate.ingredient;
 import com.cookmate.global.type.IngredientCategory;
 import com.cookmate.ingredient.domain.Ingredient;
 import com.cookmate.ingredient.dto.IngredientRequestDto;
+import com.cookmate.ingredient.dto.IngredientResponseDto;
 import com.cookmate.ingredient.repository.IngredientRepository;
 import com.cookmate.ingredient.service.Impl.IngredientServiceImpl;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -93,6 +96,26 @@ public class IngredientServiceTest {
         assertThat(ingredient.getAmbientExpiry()).isEqualTo(5);
         assertThat(ingredient.getRefrigeratedExpiry()).isEqualTo(10);
     }
+
+    @Test
+    @DisplayName("기본 재료 정보 카테고리별 (리스트) 변환")
+    void getIngredientList() {
+
+        Ingredient ingredient1 = Ingredient.builder().id(15L).ingredientCategory(IngredientCategory.채소류).build();
+        Ingredient ingredient2 = Ingredient.builder().id(16L).ingredientCategory(IngredientCategory.채소류).build();
+        Ingredient ingredient3 = Ingredient.builder().id(17L).ingredientCategory(IngredientCategory.육류).build();
+
+        List<Ingredient> ingredientList = new ArrayList<>();
+        ingredientList.add(ingredient1);
+        ingredientList.add(ingredient2);
+
+        given(ingredientRepository.findByCategory(IngredientCategory.채소류)).willReturn(ingredientList);
+
+        List<IngredientResponseDto.IngredientResponse> ingredientResponse = ingredientService.getIngredientListByCategory(IngredientCategory.채소류);
+
+        assertThat(ingredientResponse.size()).isEqualTo(2);
+    }
+
 
 
     
