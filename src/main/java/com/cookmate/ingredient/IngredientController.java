@@ -30,7 +30,7 @@ public class IngredientController {
     }
 
     // 기본 재료정보 카테고리별 반환
-    @RequestMapping
+    @RequestMapping("/category")
     public ResponseEntity<List<IngredientResponseDto.IngredientResponse>> getIngredientsByCategory(@RequestParam IngredientCategory category) {
         List<IngredientResponseDto.IngredientResponse> ingredientList = ingredientService.getIngredientListByCategory(category);
         return ResponseEntity.ok(ingredientList);
