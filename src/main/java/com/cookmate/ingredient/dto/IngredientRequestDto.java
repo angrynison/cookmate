@@ -13,6 +13,7 @@ public class IngredientRequestDto {
 
     private IngredientRequestDto() {}
 
+    @Builder
     public record CreateRequest(
 
             @NotBlank(message = "기본재료 이름은 필수입니다")

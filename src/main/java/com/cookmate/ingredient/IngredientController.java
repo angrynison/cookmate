@@ -38,22 +38,23 @@ public class IngredientController {
 
     // 기본 재료정보 등록
     @PostMapping
-    public ResponseEntity<Long> createIngredient(@RequestBody IngredientRequestDto.CreateRequest request) {
-        Long id = ingredientService.saveIngredient(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
+    public ResponseEntity<IngredientResponseDto.ApiResponse<Long>> createIngredient(@RequestBody IngredientRequestDto.CreateRequest request) {
+        Long savedId = ingredientService.saveIngredient(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(IngredientResponseDto.ApiResponse.success("재료가 성공적으로 등록됐습니다",savedId));
     }
 
     // 기본 재료 검증
     
     // 기본 재료정보 수정
     @PatchMapping("/{ingredientId}")
-    public ResponseEntity<Long> updateIngredient(@PathVariable("ingredientId") Long ingredientId, @RequestBody IngredientRequestDto.UpdateRequest request) {
+    public ResponseEntity<Long> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientRequestDto.UpdateRequest request) {
         return ResponseEntity.ok(ingredientService.updateIngredient(ingredientId, request));
     }
 
     // 기본 재료정보 삭제
     @DeleteMapping("/{ingredientId}")
-    public void deleteIngredient(@PathVariable("ingredientId") Long ingredientId) {
+    public void deleteIngredient(@PathVariable Long ingredientId) {
         ingredientService.deleteIngredient(ingredientId);
     }
 

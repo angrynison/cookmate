@@ -29,4 +29,19 @@ public class IngredientResponseDto {
         }
 
     };
+
+
+    public record ApiResponse<T>(
+            boolean success,
+            String message,
+            T data
+    ) {
+        public static <T> ApiResponse<T> success(T data) {
+            return new ApiResponse<>(true, "요청에 성공하였습니다.", data);
+        }
+
+        public static <T> ApiResponse<T> success(String message, T data) {
+            return new ApiResponse<>(true, message, data);
+        }
+    }
 }
