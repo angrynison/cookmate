@@ -48,8 +48,10 @@ public class IngredientController {
     
     // 기본 재료정보 수정
     @PatchMapping("/{ingredientId}")
-    public ResponseEntity<Long> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientRequestDto.UpdateRequest request) {
-        return ResponseEntity.ok(ingredientService.updateIngredient(ingredientId, request));
+    public ResponseEntity<IngredientResponseDto.ApiResponse<Long>> updateIngredient(@PathVariable Long ingredientId, @RequestBody IngredientRequestDto.UpdateRequest request) {
+        Long updateId = ingredientService.updateIngredient(ingredientId,request);
+        return ResponseEntity.ok()
+                .body(IngredientResponseDto.ApiResponse.success("재료가 성공적으로 수정됐습니다", updateId));
     }
 
     // 기본 재료정보 삭제
