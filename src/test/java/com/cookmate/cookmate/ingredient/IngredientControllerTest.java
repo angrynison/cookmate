@@ -126,6 +126,30 @@ public class IngredientControllerTest {
                 .andExpect(jsonPath("$.data").value(2L));
     }
 
+    @Test
+    @DisplayName("기본 재료 정보 수정 테스트")
+    void updateIngredientId() throws Exception {
+
+        Long updateId = 15L;
+
+        IngredientRequestDto.UpdateRequest updateRequest = IngredientRequestDto.UpdateRequest.builder()
+                .defaultExpiry(15)
+                .ambientExpiry(20)
+                .build();
+
+        given(ingredientService.updateIngredient(any(),any())).willReturn(updateId);
+        //Mock 데이터라 실제론 없기 때문에 Null Exception이 발생
+        //Long id = ingredientService.updateIngredient(updateId,updateRequest);
+
+        String content = objectMapper.writeValueAsString(updateRequest);
+
+        mvc.perform(MockMvcRequestBuilders.patch("/api/admin/ingredient/{id}", updateId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").value(15L));
+
+    }
 
 
 
