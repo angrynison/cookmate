@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
-// 토큰생성, 토큰 유효성 메소드 구현 클래스
+// 토큰생성, 토큰 유효성 메소드 구현 클래스 (repository 느낌)
 @Slf4j
 @Component
 public class JwtProvider {

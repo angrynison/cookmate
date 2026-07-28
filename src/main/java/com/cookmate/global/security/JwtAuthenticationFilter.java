@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-// api 요청 -> 토큰 검증 클래스
+// api 요청 -> 토큰 검증 클래스 (서비스단 느낌
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
