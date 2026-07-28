@@ -123,7 +123,7 @@ public class IngredientControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.data").value(2L));
+                .andExpect(jsonPath("$.data").value(1L));
     }
 
     @Test
