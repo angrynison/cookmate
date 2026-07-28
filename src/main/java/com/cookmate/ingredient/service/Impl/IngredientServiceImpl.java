@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
-    IngredientRepository ingredientRepository;
+    private final IngredientRepository ingredientRepository;
 
     // 재료 기본 정보 등록
     @Override
