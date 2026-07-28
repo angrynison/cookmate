@@ -5,6 +5,7 @@ import com.cookmate.global.type.IngredientCategory;
 import com.cookmate.ingredient.domain.Ingredient;
 import com.cookmate.ingredient.dto.IngredientRequestDto;
 import com.cookmate.ingredient.repository.IngredientRepository;
+import com.cookmate.ingredient.service.IngredientService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -27,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class IngredientIntegrationTest {
 
+    @Autowired
+    private IngredientService ingredientService;
     @Autowired
     private IngredientRepository ingredientRepository;
     @Autowired
@@ -53,8 +57,8 @@ public class IngredientIntegrationTest {
     }
 
     @Test
-    @DisplayName("IngredientService 통합테스트")
-    void IngredientServiceIntegrationTest() throws Exception{
+    @DisplayName("등록테스트")
+    void CreateTest() throws Exception{
         Long memberId = 1L;
         String role = "ADMIN";
 
@@ -73,6 +77,42 @@ public class IngredientIntegrationTest {
 
         long count = ingredientRepository.count();
         assertThat(count).isEqualTo(requestList.size()+1);
+    }
+
+    @Test
+    @DisplayName("수정 및 삭제 테스트")
+    void PatchNDeleteTest() throws Exception {
+
+        Long adminId = 1L;
+        String role = "ADMIN";
+
+        String token = jwtProvider.createToken(adminId,role);
+
+
+        Ingredient ingredient = Ingredient.builder()
+                .name("대파")
+                .defaultExpiry(10)
+                .frozenExpiry(15)
+                .ambientExpiry(5)
+                .refrigeratedExpiry(20)
+                .ingredientCategory(IngredientCategory.채소류)
+                .build();
+
+        Long id = ingredientRepository.save(ingredient).getId();
+
+        // 업데이트
+        IngredientRequestDto.UpdateRequest updateRequest = updateRequest();
+        String content = objectMapper.writeValueAsString(updateRequest);
+
+        mvc.perform(MockMvcRequestBuilders.patch("/api/admin/ingredient/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+                        .header("Authorization", "Bearer"+" "+token))
+                .andExpect(status().isOk());
+
+        assertThat(ingredient.getDefaultExpiry()).isEqualTo(100);
+
+
     }
 
 
@@ -105,5 +145,15 @@ public class IngredientIntegrationTest {
                 .build();
 
         return List.of(createRequest1, createRequest2, createRequest3);
+    }
+
+    IngredientRequestDto.UpdateRequest updateRequest() {
+
+        IngredientRequestDto.UpdateRequest updateRequest = IngredientRequestDto.UpdateRequest.builder()
+                .defaultExpiry(100)
+                .frozenExpiry(1000)
+                .build();
+
+        return updateRequest;
     }
 }
