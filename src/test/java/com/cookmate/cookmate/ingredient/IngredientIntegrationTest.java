@@ -112,6 +112,14 @@ public class IngredientIntegrationTest {
 
         assertThat(ingredient.getDefaultExpiry()).isEqualTo(100);
 
+        // 삭제
+        mvc.perform(MockMvcRequestBuilders.delete("/api/admin/ingredient/{id}", id)
+                .header("Authorization", "Bearer"+" "+token))
+                .andExpect(status().isOk());
+
+        int count = ingredientRepository.countAll();
+
+        assertThat(count).isEqualTo(1);
 
     }
 
