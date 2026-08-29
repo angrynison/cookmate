@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,15 +30,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 토큰이 Null값이 아니고 && 유효한 토큰이면 (변조,만료,지원하지않는)
         if (StringUtils.hasText(token) && jwtProvider.validateToken(token)) {
+            System.out.println("📌 token validation passed");
 
             Long memberId = jwtProvider.getMemberIdFromToken(token);
             String role = jwtProvider.getRoleFromToken(token);
 
+            // 확장성을 고려한 UserDetails 인터페이스를 직접 구현한 커스텀 객체 생성
+            UserDetails principal = new User(
+                    String.valueOf(memberId),
+                    "",
+                    List.of(new SimpleGrantedAuthority(role))
+            );
+
             // Spring Security가 이해할 수 있는 Authentication 객체 생성 (세션 인증 토큰 생성)
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    memberId,
+                    principal,
                     null,
-                    List.of(new SimpleGrantedAuthority(role))
+                    principal.getAuthorities()
             );
             
             // 서버 내부의 보안 context에 인증 객체 저장
