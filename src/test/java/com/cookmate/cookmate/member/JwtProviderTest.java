@@ -2,13 +2,16 @@ package com.cookmate.cookmate.member;
 
 import com.cookmate.global.security.JwtProvider;
 import com.cookmate.global.type.Cuisine;
+import com.cookmate.global.type.Role;
 import com.cookmate.member.domain.Member;
 import com.cookmate.member.dto.MemberRequestDto;
+import com.cookmate.member.dto.MemberResponseDto;
 import com.cookmate.member.repository.MemberRepository;
 import com.cookmate.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -21,21 +24,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class JwtProviderTest {
 
-    @MockitoBean
+    @Autowired
     JwtProvider jwtProvider;
 
-    @MockitoBean
+    @Autowired
     MemberRepository memberRepository;
-    @MockitoBean
+    @Autowired
     MemberService memberService;
 
-    Set<Cuisine> cuisine = new HashSet<>();
-    cuisine.add(Cuisine.한식);
-    cuisine.add(Cuisine.중식);
 
 
     @Test
     void jwtTest() {
+
+        Set<Cuisine> cuisine = new HashSet<>();
+        cuisine.add(Cuisine.한식);
+        cuisine.add(Cuisine.중식);
+
+        // 회원가입 요청 생성
         MemberRequestDto.JoinRequest joinRequest = new MemberRequestDto.JoinRequest(
                 "kalina",
                 "a12345",
@@ -54,6 +60,22 @@ public class JwtProviderTest {
                 15
         );
 
+        // 로그인 요청 생성
+        MemberRequestDto.LoginRequest loginRequest = new MemberRequestDto.LoginRequest(
+                "kalina",
+                "a12345"
+        );
+
+        MemberResponseDto.JwtTokenResponse token = memberService.login(loginRequest);
+        System.out.println(token);
+
+        Long validId = jwtProvider.getMemberIdFromToken(token.accessToken());
+        String role = jwtProvider.getRoleFromToken(token.accessToken());
+        Boolean isValid = jwtProvider.validateToken(token.accessToken());
+
+        assertThat(validId).isEqualTo(memberId);
+        assertThat(role).isEqualTo("ADMIN");
+        assertThat(isValid).isTrue();
     }
 
 
