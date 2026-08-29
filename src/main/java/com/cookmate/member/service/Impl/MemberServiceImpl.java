@@ -118,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("SEX must not be null");
         }
 
-        profileMember.createProfile(profileMember.getSex(), profileMember.getCuisines());
+        profileMember.createProfile(profileMember.getSex(), profileMember.getCuisines(), profileMember.getAge());
 
         return profileMember.getId();
     }

@@ -25,10 +25,16 @@ public class Member {
 
     @Column(length = 100)
     String name;
+
+    @Column
+    int age;
+
+
     @Column(nullable = false, unique = true)
     String loginId;
     @Column(nullable = false)
     String password;
+
 
     @Builder.Default
     @OneToMany(mappedBy = "member")
@@ -59,9 +65,10 @@ public class Member {
 
 
     // 최초 프로필 등록
-    public void createProfile(Sex sex, Set<Cuisine> cuisines) {
+    public void createProfile(Sex sex, Set<Cuisine> cuisines, int age) {
         this.sex = sex;
         this.cuisines.addAll(cuisines);
+        this.age = age;
     }
 
     // 회원 정보 수정

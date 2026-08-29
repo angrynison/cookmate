@@ -29,7 +29,8 @@ public class MemberRequestDto {
     // 최초 프로필 등록 dto
     public record ProfileRequest(
             Member.Sex sex,
-            Set<Cuisine> cuisines
+            Set<Cuisine> cuisines,
+            int age
     ) {
     }
 
