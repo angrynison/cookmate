@@ -18,4 +18,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
     // category 별 식재료 리스트반환
     @Query("SELECT i FROM Ingredient i WHERE i.ingredientCategory = :category")
     List<Ingredient> findByCategory(@Param("category") IngredientCategory category);
+
+    @Query("SELECT COUNT(i) FROM Ingredient i")
+    Integer countAll();
 }
