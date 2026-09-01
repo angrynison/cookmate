@@ -30,7 +30,7 @@ public class MemberRequestDto {
     public record ProfileRequest(
             Member.Sex sex,
             Set<Cuisine> cuisines,
-            int age
+            Integer age
     ) {
     }
 
@@ -38,7 +38,9 @@ public class MemberRequestDto {
     public record EditRequest(
             String loginId,
             String password,
-            String name
+            String name,
+            Integer age,
+            Set<Cuisine> cuisines
     ){
     }
 }
