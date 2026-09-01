@@ -8,6 +8,7 @@ import com.cookmate.pantry.domain.Pantry;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface PantryRepository extends JpaRepository<Pantry, Long> {
 
