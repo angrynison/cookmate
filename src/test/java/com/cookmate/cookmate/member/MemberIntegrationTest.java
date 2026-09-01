@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,8 @@ public class MemberIntegrationTest {
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
 
@@ -160,6 +163,42 @@ public class MemberIntegrationTest {
                 .content(profileContent)
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isCreated());
+
+        member = memberRepository.findByLoginId("kalina");
+
+        assertThat(member.get().getAge()).isEqualTo(15);
+
+        // 회원 업데이트 테스트
+        Set<Cuisine> cuisines2 = new HashSet<>();
+        cuisines2.add(Cuisine.중식);
+
+        MemberRequestDto.EditRequest editRequest = new MemberRequestDto.EditRequest(
+                "kalina",
+                "a12346",
+                "앵그리",
+                26,
+                cuisines2
+        );
+        String editContent = objectMapper.writeValueAsString(editRequest);
+
+        mvc.perform(MockMvcRequestBuilders.patch("/api/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(editContent)
+                .header("Authorization", "Bearer "+ token))
+                .andExpect(status().isOk());
+
+        member = memberRepository.findByLoginId("kalina");
+
+        String memberPassword = member.get().getPassword();
+        passwordEncoder.matches("a12346",memberPassword);
+        assertThat(member.get().getAge()).isEqualTo(26);
+
+        // 회원 삭제 테스트
+        mvc.perform(MockMvcRequestBuilders.delete("/api/user")
+                .header("Authorization", "Bearer "+ token))
+                .andExpect(status().isOk());
+
+        assertThat(memberRepository.count()).isEqualTo(0);
 
 
 
