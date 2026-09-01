@@ -136,14 +136,10 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public Long updateMember(Long id, MemberRequestDto.EditRequest editRequest) {
 
-        if (!passwordEncoder.matches(editRequest.password(), editRequest.password())) {
-            throw new IllegalArgumentException("password not match");
-        }
-
         Member editMember = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("member not found"));
 
-        editMember.update(editRequest.name(), editRequest.loginId(), editRequest.password());
+        editMember.update(editRequest.name(), editRequest.loginId(), editRequest.password(), editRequest.age(), editRequest.cuisines());
 
         return editMember.getId();
     }
