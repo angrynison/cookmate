@@ -27,7 +27,7 @@ public class Member {
     String name;
 
     @Column
-    int age;
+    Integer age;
 
 
     @Column(nullable = false, unique = true)
@@ -75,7 +75,9 @@ public class Member {
     public void update(
             String name,
             String loginId,
-            String password
+            String password,
+            Integer age,
+            Set<Cuisine> cuisines
     ) {
         if (name != null) {
             this.name = name;
@@ -85,6 +87,12 @@ public class Member {
         }
         if (password != null) {
             this.password = password;
+        }
+        if (age != null) {
+            this.age = age;
+        }
+        if (cuisines != null) {
+            this.cuisines = cuisines;
         }
     }
 
