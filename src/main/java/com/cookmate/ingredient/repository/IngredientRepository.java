@@ -8,11 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
 
-    Ingredient findByName(String name);
+    Optional<Ingredient> findByName(String name);
     Boolean existsByName(String name);
 
     // category 별 식재료 리스트반환
