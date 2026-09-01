@@ -2,6 +2,7 @@ package com.cookmate.member.dto;
 
 import com.cookmate.global.type.Cuisine;
 import com.cookmate.member.domain.Member;
+import lombok.Builder;
 
 import java.util.Set;
 
@@ -35,6 +36,7 @@ public class MemberRequestDto {
     }
 
     // 회원 정보 수정 dto
+    @Builder
     public record EditRequest(
             String loginId,
             String password,
