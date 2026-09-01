@@ -48,23 +48,22 @@ public class PantryController {
     }
 
     // 보유 식재료 수정
-    @PatchMapping("/{ingredientId}")
+    @PatchMapping("/{pantryId}")
     public ResponseEntity<Long> updatePantry(
             @RequestAttribute("memberId") Long memberId,
-            @PathVariable("ingredientId") Long ingredientId,
-            @RequestBody PantryRequestDto.UpdateRequest updateRequest
-    ) {
-        return ResponseEntity.ok(pantryService.updatePantry(memberId, ingredientId, updateRequest));
+            @PathVariable Long pantryId,
+            @RequestBody PantryRequestDto.UpdateRequest updateRequest) {
+        return ResponseEntity.ok(pantryService.updatePantry(memberId, pantryId, updateRequest));
     }
 
     // 보유 식재료 삭제
-    @DeleteMapping("/{ingredientId}")
+    @DeleteMapping("/{pantryId}")
     public void deletePantry(
             @AuthenticationPrincipal UserDetails userDetails,
-            @PathVariable("ingredientId") Long ingredientId
+            @PathVariable Long pantryId
     ) {
         Long memberId = Long.parseLong(userDetails.getUsername());
-        pantryService.deletePantry(memberId, ingredientId);
+        pantryService.deletePantry(memberId, pantryId);
     }
 
 }
