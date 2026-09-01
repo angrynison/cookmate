@@ -172,13 +172,12 @@ public class MemberIntegrationTest {
         Set<Cuisine> cuisines2 = new HashSet<>();
         cuisines2.add(Cuisine.중식);
 
-        MemberRequestDto.EditRequest editRequest = new MemberRequestDto.EditRequest(
-                "kalina",
-                "a12346",
-                "앵그리",
-                26,
-                cuisines2
-        );
+        MemberRequestDto.EditRequest editRequest = MemberRequestDto.EditRequest.builder()
+                .password("a12346")
+                .age(26)
+                .cuisines(cuisines2)
+                .build();
+
         String editContent = objectMapper.writeValueAsString(editRequest);
 
         mvc.perform(MockMvcRequestBuilders.patch("/api/user")
