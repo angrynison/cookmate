@@ -19,8 +19,8 @@ public final class PantryRequestDto {
     private PantryRequestDto() {}
 
     // web에서 정보를 받아와서 개인 식재료 등록
+    @Builder
     public record CreateRequest(
-            Long ingredientId,
 
             @NotBlank(message = "식재료 이름은 필수입니다")
             String name,
@@ -30,7 +30,6 @@ public final class PantryRequestDto {
 
             LocalDate expiryDate,
 
-            @NotNull(message = "보관 방법은 필수입니다")
             StorageType storageType,
 
             @Positive(message = "수량은 0보다 커야 합니다")
@@ -41,6 +40,7 @@ public final class PantryRequestDto {
     ) {}
 
     // web에서 정보를 받아와서 개인 식재료 업데이트
+    @Builder
     public record UpdateRequest(
 
             String name,

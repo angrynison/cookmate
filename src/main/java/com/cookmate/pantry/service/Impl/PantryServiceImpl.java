@@ -5,8 +5,7 @@ import com.cookmate.ingredient.domain.Ingredient;
 import com.cookmate.ingredient.repository.IngredientRepository;
 import com.cookmate.member.repository.MemberRepository;
 import com.cookmate.member.domain.Member;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cookmate.pantry.domain.Pantry;
@@ -15,10 +14,12 @@ import com.cookmate.pantry.repository.PantryRepository;
 import com.cookmate.pantry.dto.PantryRequestDto;
 import com.cookmate.pantry.dto.PantryResponseDto;
 import com.cookmate.pantry.service.PantryService;
-import org.springframework.web.bind.annotation.RequestAttribute;
 
+
+import org.springframework.security.access.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,12 +65,10 @@ public class PantryServiceImpl implements PantryService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
-        Ingredient ingredient = null;
-        if (request.ingredientId() != null) {
-            ingredient = ingredientRepository.findById(request.ingredientId())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
-        }
+        Ingredient ingredient = ingredientRepository.findByName(request.name())
+                .orElse(null);
 
+        // 우선순위는 1. 요청에 들어온 만료일 2. 기본 재료정보에 적힌 만료일 3. 오류
         if (request.expiryDate() != null) {
             finalExpiryDate = request.expiryDate();
         } else if (ingredient != null){
@@ -77,6 +76,14 @@ public class PantryServiceImpl implements PantryService {
         } else {
             throw new IllegalArgumentException("기본 식재료가 아닐 경우, 유통기한을 반드시 직접 입력해야 합니다.");
         }
+
+        // Quota 용량 제한 적용, 한 냉장고에 200개의 재료까지만 허용, Dos 방지
+        long currentCount = pantryRepository.countByMemberId(memberId);
+        if (currentCount >= 200) {
+            throw new IllegalStateException("냉장고가 꽉 찼습니다. 더 이상 식재료를 추가할 수 없습니다.");
+        }
+
+
         Pantry pantry = Pantry.create(
                 member,
                 ingredient,
@@ -97,11 +104,16 @@ public class PantryServiceImpl implements PantryService {
     @Transactional
     public Long updatePantry(Long memberId, Long pantryId, PantryRequestDto.UpdateRequest request) {
 
+
         memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException(("존재하지 않는 회원입니다.")));
 
         Pantry pantry = pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 식재료입니다."));
+
+        if (!pantry.getMember().getId().equals(memberId)) {
+            throw new AccessDeniedException("해당 식재료에 대한 권한이 없습니다.");
+        }
 
         pantry.update(
                 request.name(),
@@ -118,8 +130,12 @@ public class PantryServiceImpl implements PantryService {
     @Override
     @Transactional
     public void deletePantry(Long memberId, Long pantryId) {
-        pantryRepository.findById(pantryId)
+        Pantry pantry = pantryRepository.findById(pantryId)
                 .orElseThrow(() -> new IllegalArgumentException("이미 삭제되었거나 존재하지 않는 식재료입니다."));
+
+        if (!pantry.getMember().getId().equals(memberId)) {
+            throw new AccessDeniedException("해당 식재료에 대한 권한이 없습니다.");
+        }
 
         pantryRepository.deleteById(pantryId);
     }
